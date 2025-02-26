@@ -18,10 +18,34 @@ class UsersController extends Controller
         return view('users.show', compact('user'));
     }
 
+    public function edit(User $user)
+    {
+        return view('users.edit', compact('user'));
+    }
+
+    public function update(User $user, Request $request)
+    {
+        $request->validate([
+            'name' => 'required|max:50',
+            'password' => 'nullable|confirmed|min:6'
+        ]);
+
+        $data = [];
+        $data['name'] = $request->name;
+        if ($request->password) {
+            $data['password'] = bcrypt($request->password);
+        }
+        $user->update($data);
+
+        session()->flash('success', '个人资料更新成功！');
+
+        return redirect()->route('users.show', $user);
+    }
+
     public function store(Request $request)
     {
 //      Laravel 8.0版本以后修改
-        $validatedData = $request->validate([
+        $request->validate([
             'name' => 'required|unique:users|max:50',
             'email' => 'required|email|unique:users|max:255',
             'password' => 'required|confirmed|min:6'
