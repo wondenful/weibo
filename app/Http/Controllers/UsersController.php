@@ -19,14 +19,13 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
-//      Laravel 8.0版本修改
+//      Laravel 8.0版本以后修改
         $validatedData = $request->validate([
             'name' => 'required|unique:users|max:50',
             'email' => 'required|email|unique:users|max:255',
             'password' => 'required|confirmed|min:6'
         ]);
 
-//        Laravel 9.0版本修改
 //        $this->validate($request, [
 //            'name' => 'required|unique:users|max:50',
 //            'email' => 'required|email|unique:users|max:255',
